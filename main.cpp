@@ -12,38 +12,55 @@ const string python = "py";
 const string python = "python3";
 #endif
 
-string game_difficulty = "easy";
 
 /*
- * Prompts the user a number of gears.
- * Allows the user to enter an integer value between 3 and 8.
- * Will repear until valid input
- */
-int get_num_gears() {
-    cout << "Enter a number of gears between 3 and 7 inclusive";
-    int num_gears;
+* Pass a filename and determine if the file stream is in a good state
+* https://cplusplus.com/reference/ios/ios/good/
+*/
+bool file_exists(const string& filename) {
+    ifstream file(filename);
+    return file.good();  
+}
 
-    while (true) {
-        cin >> num_gears;
-        if (cin.fail() || cin.peek() != '\n' || num_gears < 3 || num_gears > 7) {
-            cout << "Invalid input. Enter a number: " << endl;
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        } else {
-            break;
-        }
+/*
+ * Prompts the user for a filename.
+ * Allows the user to enter nothing to use the default file (volvo850.txt).
+ * If the file has extension .txt
+ * and it exists in the project folder, return it.
+ * Otherwise, return the default file
+ */
+string get_filename() {
+    string filename;
+    cout << "Enter a filename (.txt) with format as follows:";
+    getline(cin, filename);
+    // Go to defult image
+    if (filename.empty()) {
+        filename = "volvo850.txt";
+        return filename;
     }
-    return num_gears;
+    if (file_exists(filename)) {
+        // Check file extension with the thing Lisa taught me for my M2OEP project
+        string extension = filename.substr(filename.find_last_of(".") + 1);
+        if (extension == "txt") {
+            return filename;
+        }
+    } else {
+        cout << "File not found (or not .txt) using default file (1997 Volvo 850 Base)" << endl;
+    }
+    return "volvo850.txt";
 }
 
 int main() {
     // Welcome
     cout << "\n -------- Welcome to Rev Match! -------- \n" << endl;
     cout << "" << endl;
-    // Get data
-    int num_gears = get_num_gears();
-    cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    ifstream filename(get_filename());
+    // Get gear count data
+    string data; 
+    int num_gears = 0;
+    if(getline(filename, data)){
+        num_gears = stoi(data);
+    }
 
     // Print info to the console
     cout << "\nProcessing...\n\nYour interactive " << num_gears << " speed gearbox will begin soon. This may take a few seconds.\n" << endl;
