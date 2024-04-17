@@ -14,7 +14,7 @@ WIDTH, HEIGHT = 800, 800
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 with open(filename, 'r') as file:
     # First line is the number of gears
-    MAX_GEAR = file.readline()
+    MAX_GEAR = int(file.readline().strip())
     # Fill a vector with all the gear ratios
     gear_ratios = []
     lines_read = 0
@@ -23,14 +23,13 @@ with open(filename, 'r') as file:
         lines_read+=1
         if lines_read >= MAX_GEAR:
                 break
+    diff_ratio = float(file.readline().strip())
+    tire_diam = float(file.readline().strip())
 
-pygame.display.set_caption("Speeds - " + MAX_GEAR)
+pygame.display.set_caption("Speeds - " + str(MAX_GEAR))
 font1 = pygame.font.SysFont("Times New Roman", 35)
-vehicle_speed = 0
-diff_ratio = 0
-tire_diam = 0
+vehicle_speed = 10
 gear = 0
-speed = 0
 rpm = (vehicle_speed * diff_ratio * gear_ratios[gear] * 336) / tire_diam
 
 
