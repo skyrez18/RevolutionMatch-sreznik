@@ -2,6 +2,7 @@
 import sys
 import math
 import pygame
+import time
 
 # initialize pygame and other variables
 pygame.init()
@@ -37,10 +38,6 @@ RADIUS = 300
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 BLACK = (0, 0, 0)
-
-
-# TODO: use key inputs to also toggle the current speed of the vehicle
-
 
 '''
 Writes text to the pygame screen
@@ -125,15 +122,17 @@ while running:
     # Shifting gears
     if keys[pygame.K_UP]:
         # TODO: is this the correct math?
-        if gear > MAX_GEAR:
+        if gear < MAX_GEAR-1:
             gear += 1
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
             draw_gear(gear)
+            time.sleep(.5)
     if keys[pygame.K_DOWN]:
         if gear > 0:
             gear -= 1
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
             draw_gear(gear)
+            time.sleep(.5)
     # Accelerating or deccelerating the vehicle
     if keys[pygame.K_a]:
         # TODO: If rpm > redline, prevent further acceleration
