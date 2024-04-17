@@ -60,7 +60,6 @@ def draw_tachometer(rpm):
     pygame.draw.circle(screen, WHITE, (CENTER_X, CENTER_Y), RADIUS, 2)
     pygame.draw.arc(screen, RED, (CENTER_X-RADIUS, CENTER_Y-RADIUS, RADIUS*2, RADIUS*2), 6.28, 0.58, 4)
 
-
     # Draw the ticks
     for angle in range(0, 360, 10):
         x1 = CENTER_X + int(RADIUS * math.cos(math.radians(angle)))
@@ -79,16 +78,23 @@ def draw_tachometer(rpm):
     pygame.draw.line(screen, RED, (CENTER_X, CENTER_Y), (x2, y2), 4)
 
 '''
-
+Calculates the current revolutions per minute of the engine
 '''
 def calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam):
     rpm = (vehicle_speed * diff_ratio * gear_ratios[gear] * 336) / tire_diam
     # TODO: Currently hard coded idle speed and redline, maybe let the user pas these values in thru the txt file?
     if rpm < 1000:
         rpm = 1000
-    if rpm > 6500:
-        rpm = 6500
+    if rpm > 9999:
+        rpm = 9999
     return rpm
+
+'''
+Writing the speed on the pygame screen
+'''
+def draw_number(number):
+    text_surface = font1.render(str(number), True, WHITE)
+    screen.blit(text_surface, (10, 10)) 
 
 # Game loop variables
 running = True
@@ -114,13 +120,17 @@ while running:
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
     # Accelerating or deccelerating the vehicle
     if keys[pygame.K_a]:
+        # TODO: If rpm > redline, prevent further acceleration
         vehicle_speed += 1
+        draw_number(vehicle_speed)
     if keys[pygame.K_d]:
         if vehicle_speed <= 0:
             vehicle_speed = 0
+            draw_number(vehicle_speed)
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
         else:
             vehicle_speed -= 1
+            draw_number(vehicle_speed)
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
 
 
