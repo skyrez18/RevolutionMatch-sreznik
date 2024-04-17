@@ -126,26 +126,29 @@ while running:
             gear += 1
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
             draw_gear(gear)
-            time.sleep(.5)
+            time.sleep(.3)
     if keys[pygame.K_DOWN]:
         if gear > 0:
             gear -= 1
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
             draw_gear(gear)
-            time.sleep(.5)
+            time.sleep(.3)
     # Accelerating or deccelerating the vehicle
     if keys[pygame.K_a]:
         # TODO: If rpm > redline, prevent further acceleration
         vehicle_speed += 1
         draw_speed(vehicle_speed)
+        time.sleep(.12)
     if keys[pygame.K_d]:
         if vehicle_speed <= 0:
             vehicle_speed = 0
             draw_speed(vehicle_speed)
+            time.sleep(.12)
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
         else:
             vehicle_speed -= 1
             draw_speed(vehicle_speed)
+            time.sleep(.12)
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
 
     draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
