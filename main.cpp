@@ -31,7 +31,7 @@ bool file_exists(const string& filename) {
  */
 string get_filename() {
     string filename;
-    cout << "Enter a filename (.txt) with format as follows: ";
+    cout << "Enter a filename (.txt) with format as specified in README.md: " << endl;
     getline(cin, filename);
     // Go to defult image
     if (filename.empty()) {

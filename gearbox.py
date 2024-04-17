@@ -12,7 +12,7 @@ filename = sys.argv[1] #passed from c++
 
 # Pygame setup
 WIDTH, HEIGHT = 800, 800
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((WIDTH, 402))
 with open(filename, 'r') as file:
     # First line is the number of gears
     MAX_GEAR = int(file.readline().strip())
