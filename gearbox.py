@@ -57,7 +57,9 @@ Draws the tachometer to the pygame screen
 def draw_tachometer(rpm):
     screen.fill(BLACK)
     # Draw the outline of the tachometer
-    pygame.draw.circle(screen, BLACK, (CENTER_X, CENTER_Y), RADIUS, 2)
+    pygame.draw.circle(screen, WHITE, (CENTER_X, CENTER_Y), RADIUS, 2)
+    pygame.draw.arc(screen, RED, (CENTER_X-RADIUS, CENTER_Y-RADIUS, RADIUS*2, RADIUS*2), 6.28, 0.58, 4)
+
 
     # Draw the ticks
     for angle in range(0, 360, 10):
@@ -65,10 +67,13 @@ def draw_tachometer(rpm):
         y1 = CENTER_Y + int(RADIUS * math.sin(math.radians(angle)))
         x2 = CENTER_X + int((RADIUS - 10) * math.cos(math.radians(angle)))
         y2 = CENTER_Y + int((RADIUS - 10) * math.sin(math.radians(angle)))
-        pygame.draw.line(screen, BLACK, (x1, y1), (x2, y2), 2)
+        if angle > 325 or angle < 1:
+            pygame.draw.line(screen, RED, (x1, y1), (x2, y2), 2)
+        else:
+            pygame.draw.line(screen, WHITE, (x1, y1), (x2, y2), 2)
 
     # Draw the needle
-    angle = 180 - (rpm / 7000) * 180  # Adjusted angle based on RPM
+    angle = 180 + (rpm/55.555)  # Adjusting angle based on RPM
     x2 = CENTER_X + int((RADIUS - 50) * math.cos(math.radians(angle)))
     y2 = CENTER_Y + int((RADIUS - 50) * math.sin(math.radians(angle)))
     pygame.draw.line(screen, RED, (CENTER_X, CENTER_Y), (x2, y2), 4)
@@ -78,6 +83,11 @@ def draw_tachometer(rpm):
 '''
 def calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam):
     rpm = (vehicle_speed * diff_ratio * gear_ratios[gear] * 336) / tire_diam
+    # TODO: Currently hard coded idle speed and redline, maybe let the user pas these values in thru the txt file?
+    if rpm < 1000:
+        rpm = 1000
+    if rpm > 6500:
+        rpm = 6500
     return rpm
 
 # Game loop variables
