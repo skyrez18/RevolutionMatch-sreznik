@@ -88,14 +88,11 @@ while running:
     keys = pygame.key.get_pressed()
     # Shifting gears
     if keys[pygame.K_UP]:
-        # TODO: Check there is a higher gear
-        if gear > MAX_GEAR:
-            # TODO: Change the gear number
+        # TODO: is this the correct math?
+        if gear > MAX_GEAR-1:
             gear += 1
     if keys[pygame.K_DOWN]:
-        # TODO: Check there is a lower gear
         if gear > MAX_GEAR:
-            # TODO: Change the gear number
             gear -= 1
     # Accelerating or deccelerating the vehicle
     if keys[pygame.K_a]:
@@ -105,6 +102,8 @@ while running:
             speed = 0
         else:
             speed -= 1
+
+    draw_tachometer(rpm)
 
     pygame.display.flip() 
     pygame.time.Clock().tick(60)
