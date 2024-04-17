@@ -54,7 +54,7 @@ Draws the tachometer to the pygame screen
 def draw_tachometer(rpm):
     screen.fill(BLACK)
     # Draw the outline of the tachometer
-    pygame.draw.circle(screen, WHITE, (CENTER_X, CENTER_Y), RADIUS, 2)
+    pygame.draw.circle(screen, WHITE, (CENTER_X, CENTER_Y), RADIUS, 4)
     pygame.draw.arc(screen, RED, (CENTER_X-RADIUS, CENTER_Y-RADIUS, RADIUS*2, RADIUS*2), 6.28, 0.58, 4)
 
     # Draw the ticks
@@ -64,15 +64,18 @@ def draw_tachometer(rpm):
         x2 = CENTER_X + int((RADIUS - 10) * math.cos(math.radians(angle)))
         y2 = CENTER_Y + int((RADIUS - 10) * math.sin(math.radians(angle)))
         if angle > 325 or angle < 1:
-            pygame.draw.line(screen, RED, (x1, y1), (x2, y2), 2)
+            pygame.draw.line(screen, RED, (x1, y1), (x2, y2), 4)
         else:
-            pygame.draw.line(screen, WHITE, (x1, y1), (x2, y2), 2)
+            pygame.draw.line(screen, WHITE, (x1, y1), (x2, y2), 4)
 
     # Draw the needle
     angle = 180 + (rpm/55.555)  # Adjusting angle based on RPM
     x2 = CENTER_X + int((RADIUS - 50) * math.cos(math.radians(angle)))
     y2 = CENTER_Y + int((RADIUS - 50) * math.sin(math.radians(angle)))
     pygame.draw.line(screen, RED, (CENTER_X, CENTER_Y), (x2, y2), 4)
+
+    # Draw the needle base
+    pygame.draw.circle(screen, WHITE, (CENTER_X, CENTER_Y+1), 4, 4)
 
 '''
 Calculates the current revolutions per minute of the engine
@@ -124,32 +127,23 @@ while running:
         # TODO: is this the correct math?
         if gear < MAX_GEAR-1:
             gear += 1
-            draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
-            draw_gear(gear)
             time.sleep(.3)
     if keys[pygame.K_DOWN]:
         if gear > 0:
             gear -= 1
-            draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
-            draw_gear(gear)
             time.sleep(.3)
     # Accelerating or deccelerating the vehicle
     if keys[pygame.K_a]:
         # TODO: If rpm > redline, prevent further acceleration
         vehicle_speed += 1
-        draw_speed(vehicle_speed)
         time.sleep(.12)
     if keys[pygame.K_d]:
         if vehicle_speed <= 0:
             vehicle_speed = 0
-            draw_speed(vehicle_speed)
             time.sleep(.12)
-            draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
         else:
             vehicle_speed -= 1
-            draw_speed(vehicle_speed)
             time.sleep(.12)
-            draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
 
     draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
     draw_speed(vehicle_speed)
