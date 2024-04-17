@@ -26,6 +26,7 @@ with open(filename, 'r') as file:
                 break
     diff_ratio = float(file.readline().strip())
     tire_diam = float(file.readline().strip())
+    red_line = int(file.readline().strip())
 
 pygame.display.set_caption("Speeds - " + str(MAX_GEAR))
 font1 = pygame.font.SysFont("Times New Roman", 35)

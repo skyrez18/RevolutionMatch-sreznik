@@ -13,6 +13,7 @@ This program intakes a .txt file <sup>1</sup> with data for number of gears, spe
 0.70               '_________________________________'
 4.40                              (differential ratio)
 25.7                          (tire diameter (inches))
+6000                                         (redline)
 ```
 
 <sup>2</sup> Unfortunatley there are some cars that have variable differential ratios like the Ford Focus RS, currently the program is not set up to deal with more than 1 differential ratio. This may cahange in the future.
