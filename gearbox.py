@@ -30,9 +30,6 @@ pygame.display.set_caption("Speeds - " + str(MAX_GEAR))
 font1 = pygame.font.SysFont("Times New Roman", 35)
 vehicle_speed = 10
 gear = 0
-rpm = (vehicle_speed * diff_ratio * gear_ratios[gear] * 336) / tire_diam
-
-
 
 # Initialize colors and locations
 CENTER_X, CENTER_Y = WIDTH // 2, HEIGHT // 2
@@ -54,6 +51,9 @@ def draw_text(text, font, color, x, y):
     text_rect.center = (x, y)
     screen.blit(text_surface, text_rect)
 
+'''
+Draws the tachometer to the pygame screen
+'''
 def draw_tachometer(rpm):
     screen.fill(BLACK)
     # Draw the outline of the tachometer
@@ -73,6 +73,13 @@ def draw_tachometer(rpm):
     y2 = CENTER_Y + int((RADIUS - 50) * math.sin(math.radians(angle)))
     pygame.draw.line(screen, RED, (CENTER_X, CENTER_Y), (x2, y2), 4)
 
+'''
+
+'''
+def calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam):
+    rpm = (vehicle_speed * diff_ratio * gear_ratios[gear] * 336) / tire_diam
+    return rpm
+
 # Game loop variables
 running = True
 gear = 1
@@ -90,19 +97,24 @@ while running:
         # TODO: is this the correct math?
         if gear > MAX_GEAR-1:
             gear += 1
+            draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
     if keys[pygame.K_DOWN]:
         if gear > MAX_GEAR:
             gear -= 1
+            draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
     # Accelerating or deccelerating the vehicle
     if keys[pygame.K_a]:
-        speed += 1
+        vehicle_speed += 1
     if keys[pygame.K_d]:
-        if speed <= 0:
-            speed = 0
+        if vehicle_speed <= 0:
+            vehicle_speed = 0
+            draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
         else:
-            speed -= 1
+            vehicle_speed -= 1
+            draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
 
-    draw_tachometer(rpm)
+
+    draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
 
     pygame.display.flip() 
     pygame.time.Clock().tick(60)
