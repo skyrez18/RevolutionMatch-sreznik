@@ -1,10 +1,5 @@
-# you will need to install cv2
-# Run "pip3 install opencv-python" in CLI - DONE
-
 # Use - ./a.out - to run in terminal
 import sys
-import time
-import numpy as np
 import math
 import pygame
 
@@ -22,13 +17,12 @@ with open(filename, 'r') as file:
     MAX_GEAR = file.readline()
     # Fill a vector with all the gear ratios
     gear_ratios = []
+    lines_read = 0
     for line in file:
         gear_ratios.append(float(line.strip()))
-        line+=1
-        if line >= MAX_GEAR:
+        lines_read+=1
+        if lines_read >= MAX_GEAR:
                 break
-
-    
 
 pygame.display.set_caption("Speeds - " + MAX_GEAR)
 font1 = pygame.font.SysFont("Times New Roman", 35)
@@ -36,6 +30,7 @@ vehicle_speed = 0
 diff_ratio = 0
 tire_diam = 0
 gear = 0
+speed = 0
 rpm = (vehicle_speed * diff_ratio * gear_ratios[gear] * 336) / tire_diam
 
 
@@ -87,8 +82,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-            # Dont record score
-
 
     # Check for key presses
     # TODO: Prevent 'money shifts'
@@ -99,15 +92,19 @@ while running:
         if gear > MAX_GEAR:
             # TODO: Change the gear number
             gear += 1
-            time.sleep(.12)
     if keys[pygame.K_DOWN]:
         # TODO: Check there is a lower gear
         if gear > MAX_GEAR:
             # TODO: Change the gear number
             gear -= 1
-            time.sleep(.12)
-
-    #
+    # Accelerating or deccelerating the vehicle
+    if keys[pygame.K_a]:
+        speed += 1
+    if keys[pygame.K_d]:
+        if speed <= 0:
+            speed = 0
+        else:
+            speed -= 1
 
     pygame.display.flip() 
     pygame.time.Clock().tick(60)
