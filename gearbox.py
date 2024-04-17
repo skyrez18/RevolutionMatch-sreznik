@@ -87,14 +87,28 @@ def calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam):
         rpm = 1000
     if rpm > 9999:
         rpm = 9999
-    return rpm
+    return int(rpm)
 
 '''
-Writing the speed on the pygame screen
+Writing the vehicle speed on the pygame screen
 '''
-def draw_number(number):
-    text_surface = font1.render(str(number), True, WHITE)
+def draw_speed(number):
+    text_surface = font1.render(str(number) + " MPH", True, WHITE)
     screen.blit(text_surface, (10, 10)) 
+
+'''
+Writing the engine speed in (RPM) the pygame screen
+'''
+def draw_rpm(number):
+    text_surface = font1.render(str(number) + " RPM", True, WHITE)
+    screen.blit(text_surface, (400, 300)) 
+
+'''
+Writing current gear number the pygame screen
+'''
+def draw_gear(number):
+    text_surface = font1.render("GEAR " + str(number), True, WHITE)
+    screen.blit(text_surface, (10, 400)) 
 
 # Game loop variables
 running = True
@@ -114,27 +128,30 @@ while running:
         if gear > MAX_GEAR-1:
             gear += 1
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
+            draw_gear(gear)
     if keys[pygame.K_DOWN]:
         if gear > MAX_GEAR:
             gear -= 1
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
+            draw_gear(gear)
     # Accelerating or deccelerating the vehicle
     if keys[pygame.K_a]:
         # TODO: If rpm > redline, prevent further acceleration
         vehicle_speed += 1
-        draw_number(vehicle_speed)
+        draw_speed(vehicle_speed)
     if keys[pygame.K_d]:
         if vehicle_speed <= 0:
             vehicle_speed = 0
-            draw_number(vehicle_speed)
+            draw_speed(vehicle_speed)
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
         else:
             vehicle_speed -= 1
-            draw_number(vehicle_speed)
+            draw_speed(vehicle_speed)
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
 
-
     draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
-
+    draw_speed(vehicle_speed)
+    draw_rpm(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
+    draw_gear(gear)
     pygame.display.flip() 
     pygame.time.Clock().tick(60)
