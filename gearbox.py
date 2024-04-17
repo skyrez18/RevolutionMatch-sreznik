@@ -107,8 +107,8 @@ def draw_rpm(number):
 Writing current gear number the pygame screen
 '''
 def draw_gear(number):
-    text_surface = font1.render("GEAR " + str(number), True, WHITE)
-    screen.blit(text_surface, (765, 10)) 
+    text_surface = font1.render("GEAR " + str(number+1), True, WHITE)
+    screen.blit(text_surface, (670, 10)) 
 
 # Game loop variables
 running = True
@@ -125,12 +125,12 @@ while running:
     # Shifting gears
     if keys[pygame.K_UP]:
         # TODO: is this the correct math?
-        if gear > MAX_GEAR-1:
+        if gear > MAX_GEAR:
             gear += 1
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
             draw_gear(gear)
     if keys[pygame.K_DOWN]:
-        if gear > MAX_GEAR:
+        if gear > 0:
             gear -= 1
             draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
             draw_gear(gear)
