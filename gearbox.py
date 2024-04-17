@@ -101,14 +101,14 @@ Writing the engine speed in (RPM) the pygame screen
 '''
 def draw_rpm(number):
     text_surface = font1.render(str(number) + " RPM", True, WHITE)
-    screen.blit(text_surface, (400, 300)) 
+    screen.blit(text_surface, (325, 10)) 
 
 '''
 Writing current gear number the pygame screen
 '''
 def draw_gear(number):
     text_surface = font1.render("GEAR " + str(number), True, WHITE)
-    screen.blit(text_surface, (10, 400)) 
+    screen.blit(text_surface, (765, 10)) 
 
 # Game loop variables
 running = True
