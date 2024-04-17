@@ -30,6 +30,7 @@ with open(filename, 'r') as file:
 pygame.display.set_caption("Speeds - " + str(MAX_GEAR))
 font1 = pygame.font.SysFont("Times New Roman", 35)
 vehicle_speed = 10
+# TODO: Staring in 2nd gear, not sure why
 gear = 0
 
 # Initialize colors and locations
@@ -112,7 +113,7 @@ def draw_gear(number):
 
 # Game loop variables
 running = True
-gear = 1
+gear = 0
 # Main game loop
 while running:
     for event in pygame.event.get():
