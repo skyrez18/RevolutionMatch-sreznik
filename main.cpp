@@ -31,7 +31,7 @@ bool file_exists(const string& filename) {
  */
 string get_filename() {
     string filename;
-    cout << "Enter a filename (.txt) with format as follows:";
+    cout << "Enter a filename (.txt) with format as follows: ";
     getline(cin, filename);
     // Go to defult image
     if (filename.empty()) {
@@ -54,7 +54,8 @@ int main() {
     // Welcome
     cout << "\n -------- Welcome to Rev Match! -------- \n" << endl;
     cout << "" << endl;
-    ifstream filename(get_filename());
+    string userfile = get_filename();
+    ifstream filename(userfile);
     // Get gear count data
     string data; 
     int num_gears = 0;
@@ -66,7 +67,7 @@ int main() {
     cout << "\nProcessing...\n\nYour interactive " << num_gears << " speed gearbox will begin soon. This may take a few seconds.\n" << endl;
     
     // Go to Python
-    string command = python + " gearbox.py " + to_string(num_gears);
+    string command = python + " gearbox.py " + userfile;
     system(command.c_str());
     return 0;
 }
