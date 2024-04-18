@@ -26,9 +26,11 @@ A 'money shift' will terminate the program.</div>
 
 ## Project #TODO List:
 ### General Tasks
-- [ ] Money shift kills program
+- [ ] Money shift (1000 over redline) kills program
+- [ ] Agressive downshift will rev down to red line (shifting within 1000 rpm of redline)
 - [ ] Implement a good way to be less than 1000 rpm (currently hardcoded)
 - [ ] Create project timeline
 - [ ] Identify stakeholders
+- [ ] Stall ? low rpms
 ### Beauty Improvements
 - [ ] Smooth refresh rate on needle when shifting
