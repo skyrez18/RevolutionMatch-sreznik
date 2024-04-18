@@ -140,32 +140,25 @@ while running:
     # Accelerating or deccelerating the vehicle
     if keys[pygame.K_a]:
         if calculate_rpm((vehicle_speed+1), diff_ratio, gear_ratios, gear, tire_diam) < red_line + 200:
-            vehicle_speed += 1
-            time.sleep(.12)
+            vehicle_speed += .1
     if keys[pygame.K_d]:
         if vehicle_speed <= 0:
             vehicle_speed = 0
             time.sleep(.15)
         else:
-            vehicle_speed -= 1
-            time.sleep(.15)
+            vehicle_speed -= .2
 
     # Stall
     if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) < 300:
         running = False
-
-    # Money shift
-    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line+1000:
-        running = False
     
     # Bad downshift
-    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 300 and calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) < red_line + 1300:
-        vehicle_speed -= 1
-        time.sleep(.1)
+    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 300:
+        vehicle_speed -= .2
             
     # Updated and re-draw everything
     draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam), red_line)
-    draw_speed(vehicle_speed)
+    draw_speed(int(vehicle_speed))
     draw_rpm(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
     draw_gear(gear)
     pygame.display.flip() 
