@@ -23,3 +23,12 @@ This program intakes a .txt file <sup>1</sup> with data for number of gears, spe
 Use the keys 'a' to accelerate the car and 'd' to decelerate the car. <br>
 Use the keys 'UP' to shift to a higher number gear and 'DOWN' to shift to a lower number gear.<br>
 A 'money shift' will terminate the program.</div>
+
+## Project #TODO List:
+### General Tasks
+- [ ] Money shift kills program
+- [ ] Implement a good way to be less than 1000 rpm (currently hardcoded)
+- [ ] Create project timeline
+- [ ] Identify stakeholders
+### Beauty Improvements
+- [ ] Smooth refresh rate on needle when shifting
