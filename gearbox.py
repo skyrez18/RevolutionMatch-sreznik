@@ -49,15 +49,21 @@ def draw_text(text, font, color, x, y):
     text_rect = text_surface.get_rect()
     text_rect.center = (x, y)
     screen.blit(text_surface, text_rect)
-
+'''
+Calculated the radian value of where the redline should start based on the input
+Equation from https://mycurvefit.com/
+'''
+def calc_redline(red_line):
+    rl = y = -9.081194 + (3.06383 - -9.081194)/(1 + (red_line/24092.42)**1.234789)
+    return rl
 '''
 Draws the tachometer to the pygame screen
 '''
-def draw_tachometer(rpm):
+def draw_tachometer(rpm, redline):
     screen.fill(BLACK)
     # Draw the outline of the tachometer
     pygame.draw.circle(screen, WHITE, (CENTER_X, CENTER_Y), RADIUS, 4)
-    pygame.draw.arc(screen, RED, (CENTER_X-RADIUS, CENTER_Y-RADIUS, RADIUS*2, RADIUS*2), 6.28, 0.58, 4)
+    pygame.draw.arc(screen, RED, (CENTER_X-RADIUS, CENTER_Y-RADIUS, RADIUS*2, RADIUS*2), 6.28, calc_redline(red_line), 4)
 
     # Draw the ticks
     for angle in range(0, 360, 10):
@@ -65,7 +71,7 @@ def draw_tachometer(rpm):
         y1 = CENTER_Y + int(RADIUS * math.sin(math.radians(angle)))
         x2 = CENTER_X + int((RADIUS - 10) * math.cos(math.radians(angle)))
         y2 = CENTER_Y + int((RADIUS - 10) * math.sin(math.radians(angle)))
-        if angle > 325 or angle < 1:
+        if angle > ((redline*180)/10000)+180 or angle == 0:
             pygame.draw.line(screen, RED, (x1, y1), (x2, y2), 4)
         else:
             pygame.draw.line(screen, WHITE, (x1, y1), (x2, y2), 4)
@@ -136,9 +142,9 @@ while running:
             time.sleep(.3)
     # Accelerating or deccelerating the vehicle
     if keys[pygame.K_a]:
-        # TODO: If rpm > redline, prevent further acceleration
-        vehicle_speed += 1
-        time.sleep(.12)
+        if calculate_rpm((vehicle_speed+1), diff_ratio, gear_ratios, gear, tire_diam) < red_line + 200:
+            vehicle_speed += 1
+            time.sleep(.12)
     if keys[pygame.K_d]:
         if vehicle_speed <= 0:
             vehicle_speed = 0
@@ -147,7 +153,8 @@ while running:
             vehicle_speed -= 1
             time.sleep(.12)
 
-    draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
+    # Updated and re-draw everything
+    draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam), red_line)
     draw_speed(vehicle_speed)
     draw_rpm(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
     draw_gear(gear)
