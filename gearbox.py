@@ -30,8 +30,7 @@ with open(filename, 'r') as file:
 
 pygame.display.set_caption("Speeds - " + str(MAX_GEAR))
 font1 = pygame.font.SysFont("Times New Roman", 35)
-vehicle_speed = 10
-# TODO: Staring in 2nd gear, not sure why
+vehicle_speed = 6
 gear = 0
 
 # Initialize colors and locations
@@ -54,7 +53,7 @@ Calculated the radian value of where the redline should start based on the input
 Equation from https://mycurvefit.com/
 '''
 def calc_redline(red_line):
-    rl = y = -9.081194 + (3.06383 - -9.081194)/(1 + (red_line/24092.42)**1.234789)
+    rl = -9.081194 + (3.06383 - -9.081194)/(1 + (red_line/24092.42)**1.234789)
     return rl
 '''
 Draws the tachometer to the pygame screen
@@ -90,9 +89,8 @@ Calculates the current revolutions per minute of the engine
 '''
 def calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam):
     rpm = (vehicle_speed * diff_ratio * gear_ratios[gear] * 336) / tire_diam
-    # TODO: Currently hard coded idle speed and redline, maybe let the user pas these values in thru the txt file?
-    if rpm < 1000:
-        rpm = 1000
+    #if rpm < 1000:
+    #    rpm = 1000
     if rpm > 9999:
         rpm = 9999
     return int(rpm)
@@ -148,11 +146,24 @@ while running:
     if keys[pygame.K_d]:
         if vehicle_speed <= 0:
             vehicle_speed = 0
-            time.sleep(.12)
+            time.sleep(.15)
         else:
             vehicle_speed -= 1
-            time.sleep(.12)
+            time.sleep(.15)
 
+    # Stall
+    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) < 300:
+        running = False
+
+    # Money shift
+    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line+1000:
+        running = False
+    
+    # Bad downshift # TODO: breaks program
+    #if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 300 and calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) < red_line + 1000:
+    #    while calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) < red_line+1000:
+    #        vehicle_speed -= 1
+            
     # Updated and re-draw everything
     draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam), red_line)
     draw_speed(vehicle_speed)
