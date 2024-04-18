@@ -159,10 +159,10 @@ while running:
     if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line+1000:
         running = False
     
-    # Bad downshift # TODO: breaks program
-    #if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 300 and calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) < red_line + 1000:
-    #    while calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) < red_line+1000:
-    #        vehicle_speed -= 1
+    # Bad downshift
+    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 300 and calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) < red_line + 1300:
+        vehicle_speed -= 1
+        time.sleep(.1)
             
     # Updated and re-draw everything
     draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam), red_line)
