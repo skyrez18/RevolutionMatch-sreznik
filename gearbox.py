@@ -2,6 +2,7 @@
 import sys
 import math
 import pygame
+import random
 import time
 
 # initialize pygame and other variables
@@ -126,11 +127,9 @@ while running:
             running = False
 
     # Check for key presses
-    # TODO: Prevent 'money shifts'
     keys = pygame.key.get_pressed()
     # Shifting gears
     if keys[pygame.K_UP]:
-        # TODO: is this the correct math?
         if gear < MAX_GEAR-1:
             gear += 1
             time.sleep(.3)
