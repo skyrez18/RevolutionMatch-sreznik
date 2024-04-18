@@ -1,7 +1,7 @@
 # RevolutionMatch-sreznik
 
 ### Overview:
-This program intakes a .txt file <sup>1</sup> with data for number of gears, specific gear ratios, differential ratios <sup>2</sup> and tire diameter to create an output (in revolutions per minute) of the engine speeed of the car with the specified specifications. Simplified, this is a digital tachometer.
+This program intakes a .txt file <sup>1</sup> with data for number of gears, specific gear ratios, differential ratio <sup>2</sup> and tire diameter to create an output (in revolutions per minute) of the engine speeed of the car with the specified specifications. Simplified, this is a digital tachometer.
 
 <sup>1</sup> .txt file format should be as follows:
 ```txt
@@ -21,16 +21,8 @@ This program intakes a .txt file <sup>1</sup> with data for number of gears, spe
 ### When in the simulation:
 <div style="background-color; border: 1.5px solid #ddd; padding: 10px;">
 Use the keys 'a' to accelerate the car and 'd' to decelerate the car. <br>
-Use the keys 'UP' to shift to a higher number gear and 'DOWN' to shift to a lower number gear.<br>
-A 'money shift' will terminate the program.</div>
+Use the keys 'UP' to shift to a higher number gear and 'DOWN' to shift to a lower number gear.</div>
 
 ## Project #TODO List:
 ### General Tasks
-- [ ] Money shift (1000 over redline) kills program
-- [ ] Agressive downshift will rev down to red line (shifting within 1000 rpm of redline)
-- [ ] Implement a good way to be less than 1000 rpm (currently hardcoded)
-- [ ] Create project timeline
-- [ ] Identify stakeholders
-- [ ] Stall ? low rpms
-### Beauty Improvements
 - [ ] Smooth refresh rate on needle when shifting
