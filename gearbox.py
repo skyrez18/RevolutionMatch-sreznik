@@ -90,10 +90,6 @@ Calculates the current revolutions per minute of the engine
 '''
 def calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam):
     rpm = (vehicle_speed * diff_ratio * gear_ratios[gear] * 336) / tire_diam
-    #if rpm < 1000:
-    #    rpm = 1000
-    if rpm > 9999:
-        rpm = 9999
     return int(rpm)
 
 '''
@@ -140,7 +136,7 @@ while running:
     # Accelerating or deccelerating the vehicle
     if keys[pygame.K_a]:
         if calculate_rpm((vehicle_speed+1), diff_ratio, gear_ratios, gear, tire_diam) < red_line + 200:
-            vehicle_speed += .1
+            vehicle_speed += .15
     if keys[pygame.K_d]:
         if vehicle_speed <= 0:
             vehicle_speed = 0
@@ -155,6 +151,11 @@ while running:
     # Bad downshift
     if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 300:
         vehicle_speed -= .2
+    
+    # Rev limiter
+    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line:
+        time.sleep(.2)
+        vehicle_speed -=.05
             
     # Updated and re-draw everything
     draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam), red_line)
