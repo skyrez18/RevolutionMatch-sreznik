@@ -12,7 +12,6 @@ const string python = "py";
 const string python = "python3";
 #endif
 
-
 /*
 * Pass a filename and determine if the file stream is in a good state
 * https://cplusplus.com/reference/ios/ios/good/
