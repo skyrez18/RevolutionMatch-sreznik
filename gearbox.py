@@ -2,7 +2,6 @@
 import sys
 import math
 import pygame
-import random
 import time
 
 # initialize pygame and other variables
@@ -29,10 +28,10 @@ with open(filename, 'r') as file:
     tire_diam = float(file.readline().strip())
     red_line = int(file.readline().strip())
 
-pygame.display.set_caption("Speeds - " + str(MAX_GEAR))
+pygame.display.set_caption(filename + " | Speeds - " + str(MAX_GEAR))
 font1 = pygame.font.SysFont("Times New Roman", 35)
-vehicle_speed = 6
-gear = 0
+vehicle_speed = 6 # MPH
+gear = 0 # 1st gear
 
 # Initialize colors and locations
 CENTER_X, CENTER_Y = WIDTH // 2, HEIGHT // 2
@@ -154,8 +153,8 @@ while running:
     
     # Rev limiter
     if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line:
-        time.sleep(.2)
-        vehicle_speed -=.05
+        time.sleep(.06)
+        vehicle_speed -=.05*(gear+1)
             
     # Updated and re-draw everything
     draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam), red_line)
