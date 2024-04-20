@@ -174,7 +174,7 @@ while running:
         vehicle_speed -= .2
     
     # Rev limiter
-    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line:
+    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 3:
         time.sleep(.06)
         vehicle_speed -=.05*(gear+1)
             
