@@ -120,8 +120,12 @@ def draw_speed(number):
 Writing the engine speed in (RPM) the pygame screen
 '''
 def draw_rpm(number):
-    text_surface = font1.render(str(number) + " RPM", True, WHITE)
-    screen.blit(text_surface, (325, 10)) 
+    if number > red_line:
+        text_surface = font1.render(str(number) + " RPM", True, RED)
+        screen.blit(text_surface, (325, 10)) 
+    else:
+        text_surface = font1.render(str(number) + " RPM", True, WHITE)
+        screen.blit(text_surface, (325, 10))
 
 '''
 Writing current gear number the pygame screen

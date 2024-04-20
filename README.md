@@ -26,3 +26,4 @@ Use the keys 'UP' to shift to a higher number gear and 'DOWN' to shift to a lowe
 ## Project #TODO List:
 ### General Tasks
 - [ ] Smooth refresh rate on needle when shifting
+- [ ] Shift lights
