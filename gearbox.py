@@ -63,6 +63,9 @@ def draw_tachometer(rpm, redline):
     # Draw the outline of the tachometer
     pygame.draw.circle(screen, WHITE, (CENTER_X, CENTER_Y), RADIUS, 4)
     pygame.draw.arc(screen, RED, (CENTER_X-RADIUS, CENTER_Y-RADIUS, RADIUS*2, RADIUS*2), 6.28, calc_redline(red_line), 4)
+    # Draw the RPM converter 
+    text_surface = font1.render(" x100 RPM", True, WHITE)
+    screen.blit(text_surface, (325, 335))
 
     # Draw the ticks
     for angle in range(0, 360, 10):
@@ -70,6 +73,8 @@ def draw_tachometer(rpm, redline):
         y1 = CENTER_Y + int(RADIUS * math.sin(math.radians(angle)))
         x2 = CENTER_X + int((RADIUS - 10) * math.cos(math.radians(angle)))
         y2 = CENTER_Y + int((RADIUS - 10) * math.sin(math.radians(angle)))
+        p1 = CENTER_X-20 + int((RADIUS-30) * math.cos(math.radians(angle)))
+        p2 = CENTER_Y- 15 + int((RADIUS-30) * math.sin(math.radians(angle)))
         # Ticks are red at redline and above
         if angle > ((redline*180)/10000)+180 or angle == 0:
             pygame.draw.line(screen, RED, (x1, y1), (x2, y2), 4)
@@ -77,7 +82,7 @@ def draw_tachometer(rpm, redline):
                 x = angle -180
                 num = (669660600 + (0.01101795 - 669660600)/(1 + (x/6026883)**1.000009))/2
                 text_surface = font1.render(str(num.real)[:2], True, RED)
-                screen.blit(text_surface, (x1, y1))
+                screen.blit(text_surface, (p1, p2))
         # White otherwise
         else:
             pygame.draw.line(screen, WHITE, (x1, y1), (x2, y2), 4)
@@ -85,17 +90,13 @@ def draw_tachometer(rpm, redline):
                 x = angle -180
                 num = (669660600 + (0.01101795 - 669660600)/(1 + (x/6026883)**1.000009))/2
                 text_surface = font1.render(str(int(num.real))[:2], True, WHITE)
-                screen.blit(text_surface, (x1, y1))
+                screen.blit(text_surface, (p1, p2))
 
     # Draw the needle
     angle = 180 + (rpm/55.555)  # Adjusting angle based on RPM
     x2 = CENTER_X + int((RADIUS - 50) * math.cos(math.radians(angle)))
     y2 = CENTER_Y + int((RADIUS - 50) * math.sin(math.radians(angle)))
     pygame.draw.line(screen, RED, (CENTER_X, CENTER_Y), (x2, y2), 4)
-
-    # Draw the RPM converter 
-    text_surface = font1.render(" x100 RPM", True, WHITE)
-    screen.blit(text_surface, (325, 335))
 
     # Draw the needle base
     pygame.draw.circle(screen, WHITE, (CENTER_X, CENTER_Y+1), 4, 4)
