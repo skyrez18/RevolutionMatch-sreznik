@@ -27,7 +27,16 @@ with open(filename, 'r') as file:
     diff_ratio = float(file.readline().strip())
     tire_diam = float(file.readline().strip())
     red_line = int(file.readline().strip())
-
+    # Adaptation for cars with variable differential ratios
+    num_alt_diff_ratio = 0
+    alt_diff_ratio = 0
+    next_line = file.readline()
+    if next_line != '':
+        alt_diff_ratio = float(next_line.strip())
+        next_line = file.readline()
+        if next_line != '':
+            num_alt_diff_ratio = int(next_line.strip())
+        
 pygame.display.set_caption(filename + " | Speeds - " + str(MAX_GEAR))
 font1 = pygame.font.SysFont("Times New Roman", 35)
 vehicle_speed = 6 # MPH
@@ -110,6 +119,22 @@ def calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam):
     return int(rpm)
 
 '''
+Calculates the current revolutions per minute of the engine (variable diff)
+'''
+def calculate_rpm_VD(vehicle_speed, alt_diff_ratio, gear_ratios, gear, tire_diam):
+    rpm = (vehicle_speed * alt_diff_ratio * gear_ratios[gear] * 336) / tire_diam
+    return int(rpm)
+
+'''
+Checking if the secondary diff ratio should be activated
+'''
+def check_active_diff(num_alt_diff_ratio, current_gear, max_gear):
+    if num_alt_diff_ratio >= max_gear - current_gear:
+        return True
+    else:   
+        return False
+
+'''
 Writing the vehicle speed on the pygame screen
 '''
 def draw_speed(number):
@@ -156,8 +181,12 @@ while running:
             time.sleep(.3)
     # Accelerating or deccelerating the vehicle
     if keys[pygame.K_a]:
-        if calculate_rpm((vehicle_speed+1), diff_ratio, gear_ratios, gear, tire_diam) < red_line + 200:
-            vehicle_speed += .15
+        if check_active_diff(num_alt_diff_ratio, gear, MAX_GEAR):
+            if calculate_rpm_VD((vehicle_speed+1), alt_diff_ratio, gear_ratios, gear, tire_diam) < red_line + 200:
+                vehicle_speed += .15
+        else:
+            if calculate_rpm((vehicle_speed+1), diff_ratio, gear_ratios, gear, tire_diam) < red_line + 200:
+                vehicle_speed += .15
     if keys[pygame.K_d]:
         if vehicle_speed <= 0:
             vehicle_speed = 0
@@ -166,22 +195,41 @@ while running:
             vehicle_speed -= .2
 
     # Stall
-    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) < 300:
-        running = False
+    if check_active_diff(num_alt_diff_ratio, gear, MAX_GEAR):
+        if calculate_rpm_VD(vehicle_speed, alt_diff_ratio, gear_ratios, gear, tire_diam) < 300:
+            running = False
+    else:
+        if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) < 300:
+            running = False
     
     # Bad downshift
-    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 300:
-        vehicle_speed -= .2
+    if check_active_diff(num_alt_diff_ratio, gear, MAX_GEAR):
+        if calculate_rpm_VD(vehicle_speed, alt_diff_ratio, gear_ratios, gear, tire_diam) > red_line + 100:
+            vehicle_speed -= .3
+    else:
+        if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 100:
+            vehicle_speed -= .3
     
     # Rev limiter
-    if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 3:
-        time.sleep(.06)
-        vehicle_speed -=.05*(gear+1)
+    if check_active_diff(num_alt_diff_ratio, gear, MAX_GEAR):
+        if calculate_rpm_VD(vehicle_speed, alt_diff_ratio, gear_ratios, gear, tire_diam) > red_line + 3:
+            time.sleep(.06)
+            vehicle_speed -=.05*(gear+1)
+    else:
+        if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 3:
+            time.sleep(.06)
+            vehicle_speed -=.05*(gear+1)
             
     # Updated and re-draw everything
-    draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam), red_line)
+    if check_active_diff(num_alt_diff_ratio, gear, MAX_GEAR):
+            draw_tachometer(calculate_rpm_VD(vehicle_speed, alt_diff_ratio, gear_ratios, gear, tire_diam), red_line)
+    else:
+        draw_tachometer(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam), red_line)
+    if check_active_diff(num_alt_diff_ratio, gear, MAX_GEAR):
+                draw_rpm(calculate_rpm_VD(vehicle_speed, alt_diff_ratio, gear_ratios, gear, tire_diam))
+    else:
+        draw_rpm(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
     draw_speed(int(vehicle_speed))
-    draw_rpm(calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam))
     draw_gear(gear)
     pygame.display.flip() 
     pygame.time.Clock().tick(60)
