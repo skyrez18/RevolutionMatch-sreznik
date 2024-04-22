@@ -16,7 +16,21 @@ This program intakes a .txt file <sup>1</sup> with data for number of gears, spe
 6000                                         (redline)
 ```
 
-<sup>2</sup> Unfortunatley there are some cars that have variable differential ratios like the Ford Focus RS, currently the program is not set up to deal with more than 1 differential ratio. This may cahange in the future.
+<sup>2</sup> Some cars that have variable differential ratios like the Ford Focus RS. Follow this format of .txt file to use varible differention technology:
+```txt
+6                                    (Number of gears)
+3.23               (Gear ratios for gears 1 through n)
+1.95               '                                 '
+1.32               '                                 '
+1.03               '                                 '
+1.13               '                                 '
+.94                '_________________________________'
+4.063                          (differential ratio #1)
+25.1                          (tire diameter (inches))
+6800                                         (redline)
+2.955                          (differential ratio #2)
+2                        (Number of gears that use it)
+```
 
 ### When in the simulation:
 <div style="background-color; border: 1.5px solid #ddd; padding: 10px;">
