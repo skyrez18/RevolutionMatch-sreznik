@@ -41,3 +41,4 @@ Use the keys 'UP' to shift to a higher number gear and 'DOWN' to shift to a lowe
 ### General Tasks
 - [ ] Smooth refresh rate on needle when shifting
 - [ ] Shift lights
+- [ ] Prevent 'money shifts'

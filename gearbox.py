@@ -183,10 +183,10 @@ while running:
     if keys[pygame.K_a]:
         if check_active_diff(num_alt_diff_ratio, gear, MAX_GEAR):
             if calculate_rpm_VD((vehicle_speed+1), alt_diff_ratio, gear_ratios, gear, tire_diam) < red_line + 200:
-                vehicle_speed += .15
+                vehicle_speed += .17
         else:
             if calculate_rpm((vehicle_speed+1), diff_ratio, gear_ratios, gear, tire_diam) < red_line + 200:
-                vehicle_speed += .15
+                vehicle_speed += .17
     if keys[pygame.K_d]:
         if vehicle_speed <= 0:
             vehicle_speed = 0
@@ -212,12 +212,12 @@ while running:
     
     # Rev limiter
     if check_active_diff(num_alt_diff_ratio, gear, MAX_GEAR):
-        if calculate_rpm_VD(vehicle_speed, alt_diff_ratio, gear_ratios, gear, tire_diam) > red_line + 3:
-            time.sleep(.06)
+        if calculate_rpm_VD(vehicle_speed, alt_diff_ratio, gear_ratios, gear, tire_diam) > red_line:
+            time.sleep(.09)
             vehicle_speed -=.05*(gear+1)
     else:
-        if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line + 3:
-            time.sleep(.06)
+        if calculate_rpm(vehicle_speed, diff_ratio, gear_ratios, gear, tire_diam) > red_line:
+            time.sleep(.09)
             vehicle_speed -=.05*(gear+1)
             
     # Updated and re-draw everything
