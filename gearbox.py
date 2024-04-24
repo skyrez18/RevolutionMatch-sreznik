@@ -39,6 +39,7 @@ with open(filename, 'r') as file:
         
 pygame.display.set_caption(filename + " | Speeds - " + str(MAX_GEAR))
 font1 = pygame.font.SysFont("Times New Roman", 35)
+font2 = pygame.font.SysFont('arial', 30, italic=True)
 vehicle_speed = 6 # MPH
 gear = 0 # 1st gear
 
@@ -62,8 +63,8 @@ Calculated the radian value of where the redline should start based on the input
 Equation from https://mycurvefit.com/
 '''
 def calc_redline(red_line):
-    rl = -9.081194 + (3.06383 - -9.081194)/(1 + (red_line/24092.42)**1.234789)
-    return rl
+    cf_rl = -9.038194 + (3.06383 - -9.081194)/(1 + (red_line/24092.42)**1.234789)
+    return cf_rl
 '''
 Draws the tachometer to the pygame screen
 '''
@@ -87,7 +88,7 @@ def draw_tachometer(rpm, redline):
         p1 = CENTER_X - 11 + int((RADIUS-30) * math.cos(math.radians(angle)))
         p2 = CENTER_Y - 15 + int((RADIUS-30) * math.sin(math.radians(angle)))
         # Ticks are red at redline and above
-        if angle > ((redline*180)/10000)+180 or angle == 0:
+        if angle >= ((redline*180)/10000)+180 or angle == 0:
             pygame.draw.line(screen, RED, (x1, y1), (x2, y2), 4)
             if angle % 18 == 0:
                 x = angle - 180
@@ -127,9 +128,15 @@ def draw_tachometer(rpm, redline):
         pygame.draw.circle(screen, yellow, (start+22, 70), 10, 10)
     if rpm > redline - 500:
         pygame.draw.circle(screen, orange, (start+44, 70), 10, 10)
-    if rpm > redline:
+    if rpm >= redline:
         pygame.draw.circle(screen, red, (start+66, 70), 10, 10)
 
+    # i-VTEC badge
+    '''
+    if rpm >= 5500:
+        text_surface = font2.render("i-VTEC", True, WHITE)
+        screen.blit(text_surface, (30, 200))
+    '''
 
 '''
 Calculates the current revolutions per minute of the engine
