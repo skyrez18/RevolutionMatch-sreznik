@@ -11,8 +11,8 @@ pygame.init()
 filename = sys.argv[1] #passed from c++
 
 # Pygame setup
-WIDTH, HEIGHT = 800, 800
-screen = pygame.display.set_mode((WIDTH, 402))
+WIDTH, game_HEIGHT = 800, 402
+screen = pygame.display.set_mode((WIDTH, game_HEIGHT))
 with open(filename, 'r') as file:
     # First line is the number of gears
     MAX_GEAR = int(file.readline().strip())
@@ -43,7 +43,7 @@ vehicle_speed = 6 # MPH
 gear = 0 # 1st gear
 
 # Initialize colors and locations
-CENTER_X, CENTER_Y = WIDTH // 2, HEIGHT // 2
+CENTER_X, CENTER_Y = WIDTH // 2, WIDTH // 2
 RADIUS = 300
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -73,32 +73,34 @@ def draw_tachometer(rpm, redline):
     pygame.draw.circle(screen, WHITE, (CENTER_X, CENTER_Y), RADIUS, 4)
     pygame.draw.arc(screen, RED, (CENTER_X-RADIUS, CENTER_Y-RADIUS, RADIUS*2, RADIUS*2), 6.28, calc_redline(red_line), 4)
     # Draw the RPM converter 
-    text_surface = font1.render(" x100 RPM", True, WHITE)
+    text_surface = font1.render(" x1000 RPM", True, WHITE)
     screen.blit(text_surface, (325, 335))
 
     # Draw the ticks
-    for angle in range(0, 360, 10):
+    for angle in range(0, 360, 9):
+        # Points for tick location
         x1 = CENTER_X + int(RADIUS * math.cos(math.radians(angle)))
         y1 = CENTER_Y + int(RADIUS * math.sin(math.radians(angle)))
         x2 = CENTER_X + int((RADIUS - 10) * math.cos(math.radians(angle)))
         y2 = CENTER_Y + int((RADIUS - 10) * math.sin(math.radians(angle)))
-        p1 = CENTER_X-20 + int((RADIUS-30) * math.cos(math.radians(angle)))
-        p2 = CENTER_Y- 15 + int((RADIUS-30) * math.sin(math.radians(angle)))
+        # Points for number location
+        p1 = CENTER_X - 11 + int((RADIUS-30) * math.cos(math.radians(angle)))
+        p2 = CENTER_Y - 15 + int((RADIUS-30) * math.sin(math.radians(angle)))
         # Ticks are red at redline and above
         if angle > ((redline*180)/10000)+180 or angle == 0:
             pygame.draw.line(screen, RED, (x1, y1), (x2, y2), 4)
-            if angle % 20 == 0:
-                x = angle -180
-                num = (669660600 + (0.01101795 - 669660600)/(1 + (x/6026883)**1.000009))/2
-                text_surface = font1.render(str(num.real)[:2], True, RED)
+            if angle % 18 == 0:
+                x = angle - 180
+                num = 0.05555556*x
+                text_surface = font1.render(str(num.real)[:1], True, RED)
                 screen.blit(text_surface, (p1, p2))
         # White otherwise
         else:
             pygame.draw.line(screen, WHITE, (x1, y1), (x2, y2), 4)
-            if angle % 20 == 0:
-                x = angle -180
-                num = (669660600 + (0.01101795 - 669660600)/(1 + (x/6026883)**1.000009))/2
-                text_surface = font1.render(str(int(num.real))[:2], True, WHITE)
+            if angle % 18 == 0:
+                x = angle - 180
+                num = 0.05555556*x
+                text_surface = font1.render(str(int(num.real))[:1], True, WHITE)
                 screen.blit(text_surface, (p1, p2))
 
     # Draw the needle
@@ -109,6 +111,9 @@ def draw_tachometer(rpm, redline):
 
     # Draw the needle base
     pygame.draw.circle(screen, WHITE, (CENTER_X, CENTER_Y+1), 4, 4)
+
+    # Cover up the 0
+    pygame.draw.rect(screen, BLACK, (120, 392, 25, 25))
 
 
 '''
@@ -145,7 +150,7 @@ def draw_speed(number):
 Writing the engine speed in (RPM) the pygame screen
 '''
 def draw_rpm(number):
-    if number > red_line:
+    if number >= red_line:
         text_surface = font1.render(str(number) + " RPM", True, RED)
         screen.blit(text_surface, (325, 10)) 
     else:
