@@ -132,11 +132,10 @@ def draw_tachometer(rpm, redline):
         pygame.draw.circle(screen, red, (start+66, 70), 10, 10)
 
     # i-VTEC badge
-    '''
-    if rpm >= 5500:
+    if rpm >= 5500 and ('honda' in filename.lower() or 'civic' in filename.lower()):
         text_surface = font2.render("i-VTEC", True, WHITE)
         screen.blit(text_surface, (30, 200))
-    '''
+
 
 '''
 Calculates the current revolutions per minute of the engine
