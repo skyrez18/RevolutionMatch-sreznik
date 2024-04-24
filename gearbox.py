@@ -115,6 +115,21 @@ def draw_tachometer(rpm, redline):
     # Cover up the 0
     pygame.draw.rect(screen, BLACK, (120, 392, 25, 25))
 
+    # Draw shiftlights (Green @ 1500, Yellow @ 1000, Orange @ 500, Red @ 0 (from redline))
+    green = (0, 255, 0)
+    yellow = (255, 255, 0)
+    orange = (255, 165, 0)
+    red = (255, 0, 0)
+    start = 700
+    if rpm > redline - 1500:
+        pygame.draw.circle(screen, green, (start, 70), 10, 10)
+    if rpm > redline - 1000:
+        pygame.draw.circle(screen, yellow, (start+22, 70), 10, 10)
+    if rpm > redline - 500:
+        pygame.draw.circle(screen, orange, (start+44, 70), 10, 10)
+    if rpm > redline:
+        pygame.draw.circle(screen, red, (start+66, 70), 10, 10)
+
 
 '''
 Calculates the current revolutions per minute of the engine
